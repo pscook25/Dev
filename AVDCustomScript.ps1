@@ -4,13 +4,13 @@ New-ItemProperty -Path HKLM:\SOFTWARE\FSLogix\Profiles -Name "AccessNetworkAsCom
 Set-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "ProfileType" -Type "Dword" -Value "0" -Force
 Remove-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "SIDDirNamePattern" -Force
 Remove-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "SIDDirNameMatch" -Force
-Remove-ItemProperty -Path HKLM:\SOFTWARE\FSLogix\Profiles -Name "CCDLocations"
+Remove-ItemProperty -Path HKLM:\SOFTWARE\FSLogix\Profiles -Name "CCDLocations" -Force
 
 
 #Set Firewall
-New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Policies\Authentication"
-New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Policies\Authentication" -Name "AllowedTlsAuthenticationEndpoints" -PropertyType MultiString -Value ('https://vmcauesca01.brightwatergroup.net/','https://vmcauesca02.brightwatergroup.net/')
-New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Policies\Authentication" -Name "ConfiguredTlsAuthenticationNetworkName" -PropertyType String -Value "BW" -force
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Policies\Authentication" -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Policies\Authentication" -Name "AllowedTlsAuthenticationEndpoints" -PropertyType MultiString -Value ('https://vmcauesca01.brightwatergroup.net/','https://vmcauesca02.brightwatergroup.net/') -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Policies\Authentication" -Name "ConfiguredTlsAuthenticationNetworkName" -PropertyType String -Value "BW" -Force
 
 
 #Set AU
@@ -29,10 +29,10 @@ Set-DnsClientGlobalSetting -SuffixSearchList @("brightwatergroup.net", "brightwa
 
 
 ##Disabling web search on the start menu makes it so much faster and effective!
-Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "BingSearchEnabled" -Value 0 -Type DWord
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "BingSearchEnabled" -Value 0 -Type DWord -Force
 
 ##Speed up File Explorer's slow folder scanning!
-Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "FolderType" -Value "NotSpecified" -Type String
+Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "FolderType" -Value "NotSpecified" -Type String -Force
 
 
 
