@@ -1,0 +1,9 @@
+#Set AU
+Set-WinSystemLocale en-AU
+Set-Culture -CultureInfo en-AU
+Set-WinHomeLocation -GeoId 12
+Set-TimeZone -Name "W. Australia Standard Time"
+$list = New-WinUserLanguageList en-AU
+$list[0].Handwriting = $true
+Set-WinUserLanguageList $list -Force
+Copy-UserInternationalSettingsToSystem -WelcomeScreen $True -NewUser $True
