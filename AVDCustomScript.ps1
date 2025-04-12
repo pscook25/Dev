@@ -1,10 +1,10 @@
 #Set FSLogix
 New-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "VHDLocations" -Value "\\stbwavdprof01.file.core.windows.net\avdprofiles\fslogix" -PropertyType MultiString -Force
 #New-ItemProperty -Path HKLM:\SOFTWARE\FSLogix\Profiles -Name "AccessNetworkAsComputerObject" -Value 1 -Force
-#Set-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "ProfileType" -Type "Dword" -Value "0" -Force
-#Remove-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "SIDDirNamePattern" -Force
-#Remove-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "SIDDirNameMatch" -Force
-#Remove-ItemProperty -Path HKLM:\SOFTWARE\FSLogix\Profiles -Name "CCDLocations"
+Set-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "ProfileType" -Type "Dword" -Value "0" -Force
+Remove-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "SIDDirNamePattern" -Force
+Remove-ItemProperty -Path HKLM:\Software\FSLogix\Profiles -Name "SIDDirNameMatch" -Force
+Remove-ItemProperty -Path HKLM:\SOFTWARE\FSLogix\Profiles -Name "CCDLocations"
 
 
 #Set Firewall
