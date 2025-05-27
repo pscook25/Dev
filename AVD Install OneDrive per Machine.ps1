@@ -26,3 +26,4 @@ REG ADD "HKLM\SOFTWARE\Policies\Microsoft\OneDrive" /v "SilentAccountConfig" /t 
 
 # Redirect and move Windows known folders to OneDrive by running the following command.
 REG ADD "HKLM\SOFTWARE\Policies\Microsoft\OneDrive" /v "KFMSilentOptIn" /t REG_SZ /d "703cd1ec-08da-462d-9517-8203ec2c2732" /f
+
