@@ -37,11 +37,13 @@ $TeamsBootStrapperUrl = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0
             
             try {     
                 # Set reg key
-                New-Item -Path HKLM:\SOFTWARE\Microsoft -Name "Teams" 
                 $registryPath = "HKLM:\SOFTWARE\Microsoft\Teams"
+                if (-not (Test-Path -Path $registryPath)) {
+                    New-Item -Path "HKLM:\SOFTWARE\Microsoft" -Name "Teams" -Force -ErrorAction SilentlyContinue
+                }
                 $registryKey = "IsWVDEnvironment"
                 $registryValue = "1"
-                Set-RegKey -registryPath $registryPath -registryKey $registryKey -registryValue $registryValue 
+                Set-RegKey -registryPath $registryPath -registryKey $registryKey -registryValue $registryValue
                 
                 # Install the latest version of the Microsoft Visual C++ Redistributable
                 Write-host "AVD AIB Customization: Teams Optimization - Starting the installation of latest Microsoft Visual C++ Redistributable"
