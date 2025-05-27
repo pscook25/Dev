@@ -182,3 +182,5 @@ function Set-RegKey($registryPath, $registryKey, $registryValue) {
  }
 
 InstallTeamsOptimizationforAVD -TeamsDownloadLink $TeamsDownloadLink -VCRedistributableLink $VCRedistributableLink -WebRTCInstaller $WebRTCInstaller
+
+### End Script ###
