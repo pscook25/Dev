@@ -14,3 +14,5 @@ $list = New-WinUserLanguageList en-AU
 $list[0].Handwriting = $true
 Set-WinUserLanguageList $list -Force
 Copy-UserInternationalSettingsToSystem -WelcomeScreen $True -NewUser $True
+
+### End Script ###
