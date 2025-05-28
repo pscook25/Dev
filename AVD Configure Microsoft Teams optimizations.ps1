@@ -1,4 +1,4 @@
-<#Author       : Akash Chawla
+ <#Author       : Akash Chawla
 # Usage        : Teams Optimization
 #>
 
@@ -8,13 +8,24 @@
 
 # Reference: https://learn.microsoft.com/en-us/azure/virtual-desktop/teams-on-avd
 
+[CmdletBinding()]
+  Param (
+        [Parameter()]
+        [string]$TeamsDownloadLink,
 
-$TeamsDownloadLink = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0x409"
-$VCRedistributableLink = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
-$WebRTCInstaller = "https://aka.ms/msrdcwebrtcsvc/msi"
-$TeamsBootStrapperUrl = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0x409"
+        [Parameter()]
+        [string]$VCRedistributableLink = "https://aka.ms/vs/17/release/vc_redist.x86.exe",
 
+        [Parameter()]
+        [string]$WebRTCInstaller = "https://aka.ms/msrdcwebrtcsvc/msi",
 
+        [Parameter()]
+        [string]$TeamsBootStrapperUrl = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0x409",
+
+        # This is the x64 MSIX package for the new teams, which will be used majority of the times
+        [Parameter()]
+        [string]$TeamMsixPackageUrl = "https://go.microsoft.com/fwlink/?linkid=2196106"
+)
  
  function InstallTeamsOptimizationforAVD($TeamsDownloadLink, $VCRedistributableLink, $WebRTCInstaller, $TeamsBootStrapperUrl) {
    
@@ -37,13 +48,11 @@ $TeamsBootStrapperUrl = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0
             
             try {     
                 # Set reg key
+                New-Item -Path HKLM:\SOFTWARE\Microsoft -Name "Teams" 
                 $registryPath = "HKLM:\SOFTWARE\Microsoft\Teams"
-                if (-not (Test-Path -Path $registryPath)) {
-                    New-Item -Path "HKLM:\SOFTWARE\Microsoft" -Name "Teams" -Force -ErrorAction SilentlyContinue
-                }
                 $registryKey = "IsWVDEnvironment"
                 $registryValue = "1"
-                Set-RegKey -registryPath $registryPath -registryKey $registryKey -registryValue $registryValue
+                Set-RegKey -registryPath $registryPath -registryKey $registryKey -registryValue $registryValue 
                 
                 # Install the latest version of the Microsoft Visual C++ Redistributable
                 Write-host "AVD AIB Customization: Teams Optimization - Starting the installation of latest Microsoft Visual C++ Redistributable"
@@ -81,10 +90,13 @@ $TeamsBootStrapperUrl = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0
 
                     Write-host "AVD AIB Customization: Teams Optimization - Finished the installation of Edge WebView2"
 
+                    $msixPackagePath = Join-Path -Path $LocalPath -ChildPath 'teams.msix'
+                    Invoke-WebRequest -Uri $TeamMsixPackageUrl -OutFile $msixPackagePath
+
                     Write-host "AVD AIB Customization: Teams Optimization - Using teams bootstrapper to install Teams 2.0"
                     $teamsBootStrapperPath = Join-Path -Path $LocalPath -ChildPath 'teamsbootstrapper.exe'
                     Invoke-WebRequest -Uri $TeamsBootStrapperUrl -OutFile $teamsBootStrapperPath
-                    Start-Process -FilePath $teamsBootStrapperPath -Wait -ArgumentList "-p" -NoNewWindow 
+                    Start-Process -FilePath $teamsBootStrapperPath -Wait -ArgumentList "-p", "-o", $msixPackagePath -NoNewWindow 
 
                     Write-host "AVD AIB Customization: Teams Optimization - Finished installation of Teams"
 
@@ -96,6 +108,9 @@ $TeamsBootStrapperUrl = "https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0
                     } else {
                         Write-Host "AVD AIB Customization: Teams Optimization - Get-AppxProvisionedPackage did not return MSTeams."
                     }
+
+                    $MSTeams_AppxPackage = Get-AppxPackage 'MSTeams' -AllUsers
+                    Write-Host "AVD AIB Customization: Teams Optimization - Status of package is" $MSTeams_AppxPackage.Status
                 } 
                 else {
                     Write-host "AVD AIB Customization: Teams Optimization - Requested to install Teams 1.0"
@@ -139,6 +154,6 @@ function Set-RegKey($registryPath, $registryKey, $registryValue) {
     }
  }
 
-InstallTeamsOptimizationforAVD -TeamsDownloadLink $TeamsDownloadLink -VCRedistributableLink $VCRedistributableLink -WebRTCInstaller $WebRTCInstaller -TeamsBootStrapperUrl $TeamsBootStrapperUrl
+InstallTeamsOptimizationforAVD -TeamsDownloadLink $TeamsDownloadLink -VCRedistributableLink $VCRedistributableLink -WebRTCInstaller $WebRTCInstaller -TeamsBootStrapperUrl $TeamsBootStrapperUrl -TeamsMsixPackageUrl $TeamMsixPackageUrl
 
  
