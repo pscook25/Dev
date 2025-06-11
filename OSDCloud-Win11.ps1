@@ -113,7 +113,7 @@ if (Test-HPIASupport){
     $Global:MyOSDCloud.HPBIOSUpdate = [bool]$true
     #$Global:MyOSDCloud.HPCMSLDriverPackLatest = [bool]$true #In Test 
     #Set HP BIOS Settings to what I want:
-    iex (irm https://raw.githubusercontent.com/gwblok/garytown/master/OSD/CloudOSD/Manage-HPBiosSettings.ps1)
+    iex (irm https://raw.githubusercontent.com/pscook25/Dev/refs/heads/main/Manage-HPBiosSettings.ps1)
     Manage-HPBiosSettings -SetSettings
 }
 
