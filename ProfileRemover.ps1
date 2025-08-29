@@ -151,6 +151,28 @@ param(
 
     $Exclude
 )
+# ===== Safe helpers injected by ChatGPT =====
+function Get-SafePercent {
+    param(
+        [double]$Num,
+        [double]$Den
+    )
+    if ($null -eq $Den -or $Den -le 0) { return 0 }
+    return [math]::Round(($Num / $Den) * 100, 2)
+}
+
+function Show-Progress {
+    param(
+        [string]$Activity,
+        [string]$Status,
+        [double]$Done,
+        [double]$Total
+    )
+    $pc = Get-SafePercent -Num $Done -Den $Total
+    Write-Progress -Activity $Activity -Status $Status -PercentComplete $pc
+}
+# ===== End helpers =====
+
 
 $ProgressPreference = "Continue" # to ensure Write-Progress displays
 
@@ -249,11 +271,7 @@ function UserInfo {
     .NOTES
 
     #>
-    param(
-        [parameter(Mandatory = $true)]$Account,
-        [switch]$SID,
-        [switch]$ProfileName
-    )
+    
     If ( $ProfileName ) {
         $U = $Account.LocalPath.Replace("C:\Users\","").ToUpper()
         Return $U
